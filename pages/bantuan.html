@@ -1,0 +1,453 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bantuan - UG Room</title>
+    <link rel="icon" href="../assets/images/Logo-Gunadarma-Universitas-Gunadarma-Original-PNG-1140x1175 1.png" type="image/png">
+    
+    <link rel="stylesheet" href="../style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Almarai:wght@300;400;700;800&display=swap" rel="stylesheet">
+</head>
+<body>
+
+    <nav class="navbar">
+        <div class="container nav-container">
+            <a href="../index.html" class="nav-brand">
+                <img src="../assets/images/Logo gundar untuk navigation bar.png" alt="Logo Gunadarma">
+            </a>
+
+            <ul class="nav-menu">
+                <li><a href="../index.html">Beranda</a></li>
+                <li><a href="pesan-kelas.html">Pesan Kelas</a></li>
+                <li><a href="info-kelas.html">Info Kelas</a></li>
+                <li><a href="jadwal-kuliah.html">Jadwal Kuliah</a></li>
+                <li><a href="bantuan.html" class="active" style="color: var(--primary-color);">Bantuan</a></li>
+            </ul>
+
+            <div style="display: flex; align-items: center;">
+                <div class="nav-search">
+                    <i class="fas fa-search"></i>
+                    <input type="text" placeholder="Cari Kelas...">
+                </div>
+                <a href="login.html" class="btn-login" id="authBtn">
+    Login <i class="fas fa-sign-in-alt"></i> 
+</a>
+            </div>
+        </div>
+    </nav>
+
+    <section class="help-section">
+        <div class="help-container">
+    
+    <div class="help-hero">
+        <h1 class="help-title">Bagaimana kami bisa membantu?</h1>
+        <div class="help-search-box">
+            <i class="fas fa-search"></i>
+            <input type="text" id="helpSearch" placeholder="Cari topik bantuan (cth: lupa password, cara booking)...">
+        </div>
+    </div>
+
+    <div class="help-cards-row">
+        <div class="help-card">
+            <div class="help-card-header">
+                <i class="far fa-user help-icon-fa" style="font-size: 2rem; color: #333;"></i>
+                <div class="help-text">
+                    <h3>Panduan Pengguna</h3>
+                    <p>Cara menggunakan sistem booking kelas untuk pertama kali.</p>
+                </div>
+            </div>
+            <a href="javascript:void(0)" class="help-link" onclick="openModal('modal-guide')">Lihat Detail <i class="fas fa-arrow-right"></i></a>
+        </div>
+
+        <div class="help-card">
+            <div class="help-card-header">
+                <i class="far fa-calendar-check help-icon-fa" style="font-size: 2rem; color: #333;"></i>
+                <div class="help-text">
+                    <h3>Pemesanan Kelas</h3>
+                    <p>Panduan langkah demi langkah melakukan booking ruang kelas.</p>
+                </div>
+            </div>
+            <a href="javascript:void(0)" class="help-link" onclick="openModal('modal-booking')">Lihat Detail <i class="fas fa-arrow-right"></i></a>
+        </div>
+
+        <div class="help-card">
+            <div class="help-card-header">
+                <i class="fas fa-info-circle help-icon-fa" style="font-size: 2rem; color: #333;"></i>
+                <div class="help-text">
+                    <h3>Informasi Kelas</h3>
+                    <p>Informasi mengenai kapasitas, fasilitas, dan ketentuan ruangan.</p>
+                </div>
+            </div>
+            <a href="javascript:void(0)" class="help-link" onclick="openModal('modal-info')">Lihat Detail <i class="fas fa-arrow-right"></i></a>
+        </div>
+    </div>
+
+    <h2 class="faq-title">FAQ POPULER</h2>
+    <div class="faq-grid" id="faqList">
+        
+        <div class="faq-box" onclick="toggleFaq(this)">
+            <div class="faq-question">
+                <span class="faq-text">Mengapa saya tidak dapat melakukan pemesanan?</span>
+                <i class="fas fa-chevron-down faq-arrow"></i>
+            </div>
+            <div class="faq-answer">
+                <p>Mungkin akun Anda belum diverifikasi atau Anda memiliki tanggungan peminjaman sebelumnya yang belum diselesaikan.</p>
+            </div>
+        </div>
+
+        <div class="faq-box" onclick="toggleFaq(this)">
+            <div class="faq-question">
+                <span class="faq-text">Bagaimana jika terjadi bentrok jadwal saat booking?</span>
+                <i class="fas fa-chevron-down faq-arrow"></i>
+            </div>
+            <div class="faq-answer">
+                <p>Sistem akan otomatis menolak booking baru jika waktu dan ruangan sudah terisi. Silakan cari ruangan atau waktu lain.</p>
+            </div>
+        </div>
+
+        <div class="faq-box" onclick="toggleFaq(this)">
+            <div class="faq-question">
+                <span class="faq-text">Apakah dapat mengubah jadwal pemesanan yang sudah dibuat?</span>
+                <i class="fas fa-chevron-down faq-arrow"></i>
+            </div>
+            <div class="faq-answer">
+                <p>Ya, Anda dapat melakukan reschedule melalui menu 'Riwayat Pemesanan' maksimal 24 jam sebelum jadwal dimulai.</p>
+            </div>
+        </div>
+
+        <div class="faq-box" onclick="toggleFaq(this)">
+            <div class="faq-question">
+                <span class="faq-text">Mengapa data ruang atau jadwal tidak muncul?</span>
+                <i class="fas fa-chevron-down faq-arrow"></i>
+            </div>
+            <div class="faq-answer">
+                <p>Pastikan koneksi internet stabil. Jika masih bermasalah, cobalah refresh halaman atau bersihkan cache browser Anda.</p>
+            </div>
+        </div>
+
+        <div class="faq-box" onclick="toggleFaq(this)">
+            <div class="faq-question">
+                <span class="faq-text">Apa yang harus saya lakukan apabila lupa kata sandi?</span>
+                <i class="fas fa-chevron-down faq-arrow"></i>
+            </div>
+            <div class="faq-answer">
+                <p>Gunakan fitur 'Lupa Password' di halaman login atau hubungi admin BAAK untuk reset password akun Anda.</p>
+            </div>
+        </div>
+
+        <div class="faq-box" onclick="toggleFaq(this)">
+            <div class="faq-question">
+                <span class="faq-text">Kepada siapa saya bisa menghubungi jika mengalami kendala?</span>
+                <i class="fas fa-chevron-down faq-arrow"></i>
+            </div>
+            <div class="faq-answer">
+                <p>Anda dapat menggunakan fitur Helpdesk (chat bubble di pojok kanan bawah) atau email ke helpdesk@gunadarma.ac.id.</p>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<div id="modal-guide" class="modal-overlay">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h3>📖 Panduan Pengguna Baru</h3>
+            <span class="close-modal" onclick="closeModal('modal-guide')">&times;</span>
+        </div>
+        <div class="modal-body">
+            <ol>
+                <li><strong>Login:</strong> Masuk menggunakan akun SSO Gunadarma Anda.</li>
+                <li><strong>Cari Ruangan:</strong> Gunakan menu "Info Kelas" untuk melihat ketersediaan.</li>
+                <li><strong>Pilih Jadwal:</strong> Pastikan jadwal tidak bentrok dengan perkuliahan reguler.</li>
+                <li><strong>Konfirmasi:</strong> Tunggu persetujuan dari admin (maksimal 1x24 jam).</li>
+            </ol>
+        </div>
+    </div>
+</div>
+
+<div id="modal-booking" class="modal-overlay">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h3>📅 Cara Booking Kelas</h3>
+            <span class="close-modal" onclick="closeModal('modal-booking')">&times;</span>
+        </div>
+        <div class="modal-body">
+            <p>Ikuti langkah mudah berikut:</p>
+            <ul>
+                <li>Buka halaman <strong>Pesan Kelas</strong>.</li>
+                <li>Pilih Gedung (E, D, J, atau K).</li>
+                <li>Klik tombol <strong>Reservasi</strong> pada kartu ruangan.</li>
+                <li>Isi form keperluan (Sidang, Sempro, atau Pengganti Kuliah).</li>
+                <li>Klik Submit.</li>
+            </ul>
+        </div>
+    </div>
+</div>
+
+<div id="modal-info" class="modal-overlay">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h3>ℹ️ Ketentuan & Fasilitas</h3>
+            <span class="close-modal" onclick="closeModal('modal-info')">&times;</span>
+        </div>
+        <div class="modal-body">
+            <p><strong>Fasilitas Standar:</strong> AC, Proyektor, Papan Tulis.</p>
+            <p><strong>Ketentuan:</strong></p>
+            <ul>
+                <li>Dilarang makan berat di dalam lab komputer.</li>
+                <li>Wajib mematikan AC dan Proyektor setelah selesai.</li>
+                <li>Kunci ruangan dikembalikan ke pos satpam gedung masing-masing.</li>
+            </ul>
+        </div>
+    </div>
+</div>
+    </section>
+
+    <button class="chat-trigger-btn" id="chatTrigger" onclick="openHelpdesk()">
+        <i class="fas fa-comment-dots"></i>
+    </button>
+
+    <div class="helpdesk-widget" id="helpdeskWidget">
+        
+        <div class="widget-content-scroll">
+            
+            <div id="viewHome">
+                <div class="header-home">
+                    <button class="btn-header-action" onclick="closeHelpdesk()" style="position: absolute; right: 20px; top: 20px;">
+                        <i class="fas fa-times"></i>
+                    </button>
+                    <h3 class="dash-title">Helpdesk UG ROOM</h3>
+                    <p class="dash-subtitle">Waktu Operasional Senin, Rabu, Kamis, dan Jumat (05.00-14.00 WIB)</p>
+                </div>
+
+                <div class="home-overlap-container">
+                    <div class="card-new-chat" onclick="goToChatRoom()">
+                        <div class="card-text">
+                            <h4>Percakapan Baru</h4>
+                            <p>Membalas dalam beberapa menit</p>
+                        </div>
+                        <i class="fas fa-paper-plane icon-send-purple"></i>
+                    </div>
+                </div>
+            </div>
+
+            <div id="viewHistory" style="display: none;">
+                <div class="header-history">
+                    <div style="display: flex; align-items: center; gap: 10px;">
+                        <button class="btn-header-action" onclick="switchTab('home')"><i class="fas fa-chevron-left"></i></button>
+                        <span>Percakapan</span>
+                    </div>
+                    <button class="btn-header-action" onclick="closeHelpdesk()"><i class="fas fa-times"></i></button>
+                </div>
+
+                <div class="history-container">
+                    <span class="label-section">Mulai percakapan baru</span>
+                    
+                    <div class="card-new-chat" onclick="goToChatRoom()">
+                        <div class="card-text">
+                            <h4>Percakapan Baru</h4>
+                            <p>Membalas dalam beberapa menit</p>
+                        </div>
+                        <i class="fas fa-paper-plane icon-send-purple"></i>
+                    </div>
+
+                    <span class="label-section">Terbaru</span>
+
+                    <div class="history-item" onclick="goToChatRoom()">
+                        <div class="history-item-top">
+                            <span class="history-role">Helpdesk UG ROOM</span>
+                            <span class="history-time">sekarang</span>
+                        </div>
+                        <div class="history-preview">
+                            <span>Selamat datang di layanan UG...</span>
+                            <i class="fas fa-chevron-right icon-arrow-right"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        <div class="widget-footer" id="mainFooter">
+            <button class="nav-btn active" id="btnHome" onclick="switchTab('home')">
+                <i class="fas fa-home"></i>
+            </button>
+            <button class="nav-btn" id="btnHistory" onclick="switchTab('history')">
+                <i class="far fa-comment-alt"></i>
+            </button>
+        </div>
+
+        <div class="screen-chat-room" id="viewChatRoom">
+            <div class="room-header">
+                <div style="display: flex; align-items: center; gap: 10px;">
+                    <i class="fas fa-robot"></i> <strong>UG Room Assistant</strong>
+                </div>
+                <button class="btn-header-action" onclick="closeHelpdesk()"><i class="fas fa-times"></i></button>
+            </div>
+            <div class="room-body">
+                <div class="bubble-bot">Halo! 👋 Ada yang bisa saya bantu?</div>
+            </div>
+            <div class="room-footer">
+                <input type="text" class="input-chat" placeholder="Ketik pesan...">
+                <button class="btn-chat-send"><i class="fas fa-paper-plane"></i></button>
+            </div>
+            <div style="text-align: center; padding: 10px;">
+                <span style="font-size: 0.8rem; color: #999; cursor: pointer; text-decoration: underline;" onclick="exitChatRoom()">Kembali</span>
+            </div>
+        </div>
+
+    </div>
+
+    <script>
+        // --- LOGIC HELPDESK WIDGET (UPDATED V3) ---
+        const viewHome = document.getElementById('viewHome');
+        const viewHistory = document.getElementById('viewHistory');
+        const viewChatRoom = document.getElementById('viewChatRoom');
+        const mainFooter = document.getElementById('mainFooter');
+        const btnHome = document.getElementById('btnHome');
+        const btnHistory = document.getElementById('btnHistory');
+
+        function switchTab(tab) {
+            if (tab === 'home') {
+                viewHome.style.display = 'block';
+                viewHistory.style.display = 'none';
+                
+                btnHome.classList.add('active');
+                btnHistory.classList.remove('active');
+                btnHome.innerHTML = '<i class="fas fa-home"></i>';
+                btnHistory.innerHTML = '<i class="far fa-comment-alt"></i>'; 
+            } else {
+                viewHome.style.display = 'none';
+                viewHistory.style.display = 'block';
+                
+                btnHome.classList.remove('active');
+                btnHistory.classList.add('active');
+                btnHome.innerHTML = '<i class="fas fa-home" style="opacity:0.5"></i>';
+                btnHistory.innerHTML = '<i class="fas fa-comment-alt"></i>'; 
+            }
+        }
+
+        function goToChatRoom() {
+            viewChatRoom.style.display = 'flex';
+        }
+
+        function exitChatRoom() {
+            viewChatRoom.style.display = 'none';
+            switchTab('home');
+        }
+
+        function openHelpdesk() {
+            document.getElementById('chatTrigger').style.display = 'none';
+            document.getElementById('helpdeskWidget').style.display = 'flex';
+            switchTab('home'); 
+        }
+
+        function closeHelpdesk() {
+            document.getElementById('helpdeskWidget').style.display = 'none';
+            document.getElementById('chatTrigger').style.display = 'flex';
+        }
+
+        // --- 1. LOGIC MODAL POPUP ---
+    function openModal(modalId) {
+        document.getElementById(modalId).style.display = 'flex';
+    }
+
+    function closeModal(modalId) {
+        document.getElementById(modalId).style.display = 'none';
+    }
+
+    // Tutup modal jika klik di luar area putih
+    window.onclick = function(event) {
+        if (event.target.classList.contains('modal-overlay')) {
+            event.target.style.display = "none";
+        }
+    }
+
+    // --- 2. LOGIC FAQ ACCORDION ---
+    function toggleFaq(element) {
+        // Toggle class active pada elemen yang diklik
+        element.classList.toggle('active');
+        
+        // (Opsional) Tutup FAQ lain saat satu dibuka
+        /*
+        const allFaqs = document.querySelectorAll('.faq-box');
+        allFaqs.forEach(faq => {
+            if (faq !== element) {
+                faq.classList.remove('active');
+            }
+        });
+        */
+    }
+
+    // --- 3. LOGIC SEARCH SEDERHANA (Bonus) ---
+    const searchInput = document.getElementById('helpSearch');
+    const faqList = document.querySelectorAll('.faq-box');
+
+    if(searchInput) {
+        searchInput.addEventListener('keyup', function(e) {
+            const term = e.target.value.toLowerCase();
+            
+            faqList.forEach(faq => {
+                const text = faq.innerText.toLowerCase();
+                if(text.includes(term)) {
+                    faq.style.display = 'flex';
+                } else {
+                    faq.style.display = 'none';
+                }
+            });
+        });
+    }
+    </script>
+
+    <script>
+    // --- SCRIPT GLOBAL PENGATUR NAVBAR ---
+    document.addEventListener('DOMContentLoaded', () => {
+        // 1. Cek apakah User sudah login?
+        const isLoggedIn = localStorage.getItem("isLoggedIn");
+        const userName = localStorage.getItem("userName");
+        
+        // Ambil elemen tombol di Navbar
+        const authBtn = document.getElementById('authBtn');
+
+        if (isLoggedIn === "true" && authBtn) {
+            // JIKA SUDAH LOGIN:
+            
+            // A. Ubah Teks Tombol jadi Nama User (atau 'Logout')
+            // Kita ambil nama depan saja agar muat di navbar
+            const firstName = userName.split(" ")[0]; 
+            
+            authBtn.innerHTML = `${firstName} <i class="fas fa-sign-out-alt"></i>`;
+            
+            // B. Ubah Warna Tombol jadi Merah (Visual Logout)
+            authBtn.style.backgroundColor = "#E74C3C"; // Merah
+            
+            // C. Ubah Fungsi Tombol jadi LOGOUT
+            authBtn.href = "#"; // Matikan link ke halaman login
+            authBtn.onclick = function(e) {
+                e.preventDefault();
+                handleLogout();
+            };
+        }
+    });
+
+    // --- FUNGSI LOGOUT ---
+    function handleLogout() {
+        // Konfirmasi
+        if(confirm("Apakah Anda yakin ingin keluar?")) {
+            // 1. Hapus Data Sesi
+            localStorage.removeItem("isLoggedIn");
+            localStorage.removeItem("userName");
+            
+            // 2. Reload Halaman untuk mereset tampilan ke 'Login'
+            window.location.reload(); 
+            
+            // Atau redirect ke halaman login:
+            // window.location.href = "pages/login.html"; 
+        }
+    }
+</script>
+
+</body>
+</html>

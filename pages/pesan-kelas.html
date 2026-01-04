@@ -1,0 +1,1073 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Pesan Kelas - UG Room</title>
+  <link rel="icon" href="../assets/images/Logo-Gunadarma-Universitas-Gunadarma-Original-PNG-1140x1175 1.png" type="image/png">
+
+  <link rel="stylesheet" href="../style.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=Almarai:wght@300;400;700;800&display=swap" rel="stylesheet">
+
+  <style>
+    /* --- CSS KHUSUS HALAMAN INI --- */
+
+    /* 1. Tombol Rekomendasi (Hijau & Tengah) */
+    .btn-recommendation {
+      background: #27AE60;
+      color: #fff;
+      border: none;
+      padding: 12px 30px;
+      border-radius: 30px;
+      font-weight: 800;
+      cursor: pointer;
+      box-shadow: 0 4px 15px rgba(39, 174, 96, 0.4);
+      transition: transform 0.2s, background-color 0.2s;
+      display: flex; align-items: center; gap: 10px;
+      font-family: 'Almarai', sans-serif;
+      font-size: 1rem;
+    }
+    .btn-recommendation:hover { transform: scale(1.05); background: #219150; }
+
+    /* 2. State Disabled (Belum Login - Warna Abu-abu) */
+    .btn-disabled {
+      background-color: #95a5a6 !important;
+      color: #ecf0f1 !important;
+      cursor: not-allowed !important;
+      box-shadow: none !important;
+      pointer-events: none;
+    }
+    .badge-disabled {
+      border-color: #95a5a6 !important;
+      color: #95a5a6 !important;
+      background-color: rgba(149, 165, 166, 0.1) !important;
+    }
+
+    /* 3. Style Pesan Kosong */
+    .empty-state-message {
+      display: none;
+      text-align: center;
+      width: 100%;
+      padding: 40px;
+    }
+    .empty-state-icon { font-size: 4rem; color: #ddd; margin-bottom: 15px; }
+    .empty-state-text { color: #666; font-weight: 600; font-size: 1.2rem; }
+
+    /* 4. Modal + Receipt card (mirip gambar 1) */
+    .modal-overlay{
+      position: fixed;
+      inset: 0;
+      background: rgba(16,24,40,0.45);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      z-index: 9999;
+      padding: 18px;
+      backdrop-filter: blur(4px);
+      overflow-y: auto;
+    }
+
+    .receipt-card{
+      width: min(560px, 92vw);
+      background: #fff;
+      border-radius: 16px;
+      box-shadow: 0 20px 70px rgba(0,0,0,0.25);
+      font-family: 'Almarai', sans-serif;
+      animation: slideUp 0.25s ease-out;
+      max-height: 90vh;
+      overflow-y: auto;
+    }
+
+    @keyframes slideUp {
+      from { transform: translateY(14px); opacity: 0; }
+      to   { transform: translateY(0); opacity: 1; }
+    }
+
+    /* Header */
+    .receipt-top{
+      padding: 22px 22px 12px 22px;
+      text-align: center;
+    }
+    .receipt-success-icon{
+      width: 54px;
+      height: 54px;
+      border-radius: 999px;
+      margin: 0 auto 10px auto;
+      background: rgba(39,174,96,0.12);
+      display: grid;
+      place-items: center;
+    }
+    .receipt-success-icon i{ color: #27AE60; font-size: 28px; }
+    .receipt-title{
+      margin: 0;
+      font-size: 1.25rem;
+      font-weight: 800;
+      color: #111827;
+    }
+    .receipt-subtitle{
+      margin: 6px 0 0 0;
+      color: #6B7280;
+      font-size: 0.95rem;
+      font-weight: 600;
+    }
+
+    /* Divider */
+    .receipt-divider{
+      height: 1px;
+      background: #E5E7EB;
+      margin: 10px 0 0 0;
+    }
+
+    /* Body section */
+    .receipt-section{
+      padding: 16px 22px 18px 22px;
+    }
+    .receipt-section h4{
+      margin: 0 0 12px 0;
+      font-size: 0.95rem;
+      font-weight: 800;
+      color: #111827;
+    }
+
+    /* Detail grid */
+    .receipt-grid{
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+    }
+    .receipt-item{
+      border: 1px solid #E5E7EB;
+      border-radius: 12px;
+      padding: 10px 12px;
+      background: #F9FAFB;
+    }
+    .receipt-item .label{
+      font-size: 0.78rem;
+      color: #6B7280;
+      font-weight: 700;
+      margin-bottom: 4px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .receipt-item .value{
+      font-size: 0.92rem;
+      color: #111827;
+      font-weight: 800;
+      word-break: break-word;
+    }
+    .badge-status{
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 6px 10px;
+      border-radius: 999px;
+      font-weight: 800;
+      font-size: 0.82rem;
+      background: rgba(39,174,96,0.12);
+      color: #1E874D;
+    }
+
+    /* Instructions list */
+    .instructions{
+      margin-top: 14px;
+      display: grid;
+      gap: 10px;
+    }
+    .instruction-row{
+      display: flex;
+      gap: 10px;
+      align-items: flex-start;
+      padding: 10px 12px;
+      border-radius: 12px;
+      border: 1px solid #E5E7EB;
+      background: #F9FAFB;
+    }
+    .step-badge{
+      width: 24px;
+      height: 24px;
+      border-radius: 7px;
+      background: rgba(118,57,150,0.12);
+      display: grid;
+      place-items: center;
+      color: #763996;
+      font-weight: 900;
+      flex: 0 0 24px;
+    }
+    .instruction-row p{
+      margin: 0;
+      color: #374151;
+      font-weight: 700;
+      font-size: 0.9rem;
+    }
+
+    /* Important note box */
+    .note-box{
+      margin-top: 14px;
+      background: #FFFBEB;
+      border: 1px solid #FDE68A;
+      color: #92400E;
+      border-radius: 12px;
+      padding: 12px;
+    }
+    .note-box .note-title{
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-weight: 900;
+      margin-bottom: 6px;
+    }
+    .note-box .note-title i{ color: #F59E0B; }
+    .note-box p{
+      margin: 0;
+      font-weight: 700;
+      font-size: 0.9rem;
+      line-height: 1.35;
+    }
+
+    /* WhatsApp section */
+    .wa-section{
+      margin-top: 14px;
+      background: #F0FDF4;
+      border: 1px solid #BBF7D0;
+      border-radius: 12px;
+      padding: 12px;
+    }
+    .wa-title{
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-weight: 900;
+      color: #166534;
+      margin-bottom: 8px;
+      font-size: 0.95rem;
+    }
+    .wa-draft-area{
+      width: 100%;
+      border: 1px solid #D1D5DB;
+      background: #fff;
+      font-family: 'Almarai', sans-serif;
+      font-size: 0.9rem;
+      padding: 10px;
+      border-radius: 10px;
+      color: #111827;
+      resize: vertical;
+      margin-bottom: 10px;
+      outline: none;
+    }
+    .btn-send-wa{
+      display: inline-flex;
+      width: 100%;
+      justify-content: center;
+      align-items: center;
+      gap: 8px;
+      background-color: #25D366;
+      color: #fff;
+      text-decoration: none;
+      padding: 12px 12px;
+      border-radius: 10px;
+      font-weight: 900;
+      font-family: 'Almarai', sans-serif;
+    }
+    .btn-send-wa:hover{ filter: brightness(0.97); }
+
+    /* Footer action buttons */
+    .receipt-actions{
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 10px;
+      margin-top: 14px;
+    }
+    .receipt-btn{
+      border: none;
+      border-radius: 10px;
+      padding: 10px 12px;
+      font-weight: 900;
+      cursor: pointer;
+      display: inline-flex;
+      justify-content: center;
+      align-items: center;
+      gap: 8px;
+      font-family: 'Almarai', sans-serif;
+    }
+    .btn-blue{ background: #1D9BF0; color: #fff; }
+    .btn-gray{ background: #E5E7EB; color: #111827; }
+    .btn-green{ background: #22C55E; color: #fff; }
+    .receipt-btn:hover{ filter: brightness(0.97); }
+
+    .receipt-back{
+      margin-top: 12px;
+      width: 100%;
+      background: #763996;
+      color: #fff;
+      border: none;
+      border-radius: 12px;
+      padding: 12px 14px;
+      font-weight: 900;
+      cursor: pointer;
+      font-family: 'Almarai', sans-serif;
+    }
+    .receipt-back:hover{ filter: brightness(0.98); }
+
+    @media (max-width: 420px){
+      .receipt-grid{ grid-template-columns: 1fr; }
+      .receipt-actions{ grid-template-columns: 1fr; }
+    }
+
+    /* Print: hanya cetak receipt (modal) */
+    @media print {
+      body * { visibility: hidden !important; }
+      #modal-receipt, #modal-receipt * { visibility: visible !important; }
+      #modal-receipt {
+        position: fixed !important;
+        inset: 0 !important;
+        background: #fff !important;
+        padding: 0 !important;
+        margin: 0 !important;
+      }
+      .receipt-card{
+        width: 100% !important;
+        max-height: none !important;
+        overflow: visible !important;
+        box-shadow: none !important;
+        border-radius: 0 !important;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- NAVBAR (sesuai code Anda) -->
+  <nav class="navbar">
+    <div class="container nav-container">
+      <a href="../index.html" class="nav-brand">
+        <img src="../assets/images/Logo gundar untuk navigation bar.png" alt="Logo Gunadarma">
+      </a>
+
+      <ul class="nav-menu">
+        <li><a href="../index.html">Beranda</a></li>
+        <li><a href="pesan-kelas.html" class="active" style="color: var(--primary-color);">Pesan Kelas</a></li>
+        <li><a href="info-kelas.html">Info Kelas</a></li>
+        <li><a href="jadwal-kuliah.html">Jadwal Kuliah</a></li>
+        <li><a href="bantuan.html">Bantuan</a></li>
+      </ul>
+
+      <div style="display:flex; align-items:center;">
+        <div class="nav-search">
+          <i class="fas fa-search" style="cursor:pointer;" onclick="handleGlobalSearch()"></i>
+          <input type="text" id="globalSearchInput" placeholder="Cari Kelas..." onkeypress="if(event.key==='Enter') handleGlobalSearch()">
+        </div>
+        <a href="login.html" class="btn-login" id="authBtn">
+          Login <i class="fas fa-sign-in-alt"></i>
+        </a>
+      </div>
+    </div>
+  </nav>
+
+  <section class="booking-section">
+
+    <div id="emptyState" class="empty-state-message">
+      <i class="fas fa-search empty-state-icon"></i>
+      <p class="empty-state-text">Kelas tidak ditemukan, silahkan cari kelas yang lain.</p>
+    </div>
+
+    <div id="recContainer" style="width: 100%; max-width: 1400px; padding: 0 20px; margin-bottom: 20px; display: flex; justify-content: center; position: relative; z-index: 10;">
+      <button class="btn-recommendation" onclick="showRecommendations()">
+        <i class="fas fa-magic"></i> Rekomendasi Untuk Saya
+      </button>
+    </div>
+
+    <div class="cards-scroll-container" id="cardsContainer">
+
+      <div class="class-card">
+        <img src="../assets/images/card1.jpg" alt="Ruang Kelas" class="card-image">
+        <div class="card-content">
+          <h3 class="card-title">Ruang Kelas Mengajar</h3>
+          <p class="card-desc">Universitas Gunadarma Kampus D<br>Region - Depok<br>Kode kelas - D281</p>
+          <a class="card-link" style="cursor:pointer;" onclick="openBookingDetail(this.closest('.class-card'))">
+            Pesan sekarang <i class="fas fa-arrow-right"></i>
+          </a>
+        </div>
+      </div>
+
+      <div class="class-card">
+        <img src="../assets/images/biaya-masuk-universitas-gunadarma-3-1024x576.jpg" alt="Ruang Praktikum" class="card-image">
+        <div class="card-content">
+          <h3 class="card-title">Ruang Kelas Praktikum</h3>
+          <p class="card-desc">Universitas Gunadarma Kampus K<br>Region - Karawaci<br>Kode kelas - K132</p>
+          <a class="card-link" style="cursor:pointer;" onclick="openBookingDetail(this.closest('.class-card'))">
+            Pesan sekarang <i class="fas fa-arrow-right"></i>
+          </a>
+        </div>
+      </div>
+
+      <div class="class-card">
+        <img src="../assets/images/ruang kelas.jpg" alt="Ruang Mengajar" class="card-image">
+        <div class="card-content">
+          <h3 class="card-title">Ruang Kelas Mengajar</h3>
+          <p class="card-desc">Universitas Gunadarma Kampus H<br>Region - Depok<br>Kode kelas - H245</p>
+          <a class="card-link" style="cursor:pointer;" onclick="openBookingDetail(this.closest('.class-card'))">
+            Pesan sekarang <i class="fas fa-arrow-right"></i>
+          </a>
+        </div>
+      </div>
+
+      <div class="class-card">
+        <img src="../assets/images/ruang kelas1.jpg" alt="Ruang Praktikum" class="card-image">
+        <div class="card-content">
+          <h3 class="card-title">Ruang Kelas Praktikum</h3>
+          <p class="card-desc">Universitas Gunadarma Kampus D<br>Region - Depok<br>Kode kelas - D136</p>
+          <a class="card-link" style="cursor:pointer;" onclick="openBookingDetail(this.closest('.class-card'))">
+            Pesan sekarang <i class="fas fa-arrow-right"></i>
+          </a>
+        </div>
+      </div>
+
+      <div class="class-card">
+        <img src="../assets/images/card1.jpg" alt="Ruang Kelas" class="card-image">
+        <div class="card-content">
+          <h3 class="card-title">Ruang Kelas Mengajar</h3>
+          <p class="card-desc">Universitas Gunadarma Kampus D<br>Region - Depok<br>Kode kelas - D281</p>
+          <a class="card-link" style="cursor:pointer;" onclick="openBookingDetail(this.closest('.class-card'))">
+            Pesan sekarang <i class="fas fa-arrow-right"></i>
+          </a>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Filter bar (tetap) -->
+    <div class="filter-bar" id="filterBar">
+      <div class="filter-group">
+        <label class="filter-label">Region</label>
+        <div class="custom-dropdown">
+          <input type="text" class="dropdown-input" placeholder="Pilih/Ketik Region"
+                 id="inputRegion" onclick="toggleDropdown('listRegion')">
+          <i class="fas fa-chevron-up dropdown-icon-arrow"></i>
+          <div id="listRegion" class="dropdown-list">
+            <div class="dropdown-item" onclick="selectOption('inputRegion', 'listRegion', '')">Semua Region</div>
+            <div class="dropdown-item" onclick="selectOption('inputRegion', 'listRegion', 'Depok')">Depok</div>
+            <div class="dropdown-item" onclick="selectOption('inputRegion', 'listRegion', 'Karawaci')">Karawaci</div>
+            <div class="dropdown-item" onclick="selectOption('inputRegion', 'listRegion', 'Kalimalang')">Kalimalang</div>
+            <div class="dropdown-item" onclick="selectOption('inputRegion', 'listRegion', 'Cengkareng')">Cengkareng</div>
+            <div class="dropdown-item" onclick="selectOption('inputRegion', 'listRegion', 'Simatupang')">Simatupang</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="filter-group">
+        <label class="filter-label">Tipe Kelas</label>
+        <div class="custom-dropdown">
+          <input type="text" class="dropdown-input" placeholder="Pilih/Ketik Tipe"
+                 id="inputTipe" onclick="toggleDropdown('listTipe')">
+          <i class="fas fa-chevron-up dropdown-icon-arrow"></i>
+          <div id="listTipe" class="dropdown-list">
+            <div class="dropdown-item" onclick="selectOption('inputTipe', 'listTipe', '')">Semua Tipe</div>
+            <div class="dropdown-item" onclick="selectOption('inputTipe', 'listTipe', 'Mengajar')">Kelas Mengajar</div>
+            <div class="dropdown-item" onclick="selectOption('inputTipe', 'listTipe', 'Praktikum')">Kelas Praktikum</div>
+            <div class="dropdown-item" onclick="selectOption('inputTipe', 'listTipe', 'Laboratorium')">Laboratorium</div>
+            <div class="dropdown-item" onclick="selectOption('inputTipe', 'listTipe', 'Auditorium')">Auditorium</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="filter-group">
+        <label class="filter-label">Waktu</label>
+        <div class="custom-dropdown">
+          <input type="text" class="dropdown-input" placeholder="Pilih/Ketik Waktu"
+                 id="inputWaktu" onclick="toggleDropdown('listWaktu')">
+          <i class="fas fa-chevron-up dropdown-icon-arrow"></i>
+          <div id="listWaktu" class="dropdown-list">
+            <div class="dropdown-item" onclick="selectOption('inputWaktu', 'listWaktu', '')">Semua Waktu</div>
+            <div class="dropdown-item" onclick="selectOption('inputWaktu', 'listWaktu', 'Pagi')">Pagi (07.30 - 11.30)</div>
+            <div class="dropdown-item" onclick="selectOption('inputWaktu', 'listWaktu', 'Siang')">Siang (12.30 - 15.30)</div>
+            <div class="dropdown-item" onclick="selectOption('inputWaktu', 'listWaktu', 'Sore')">Sore (15.30 - 18.30)</div>
+          </div>
+        </div>
+      </div>
+
+      <button class="btn-filter-purple" onclick="applyCustomFilter()">Gunakan Filter</button>
+    </div>
+
+    <!-- DETAIL VIEW -->
+    <div class="booking-detail-view" id="detailView" style="display:none;">
+      <div class="detail-card">
+        <button class="btn-back" onclick="closeBookingDetail()">
+          <i class="fas fa-chevron-left"></i>
+        </button>
+
+        <div class="detail-image-side">
+          <img src="" alt="Room Detail" class="detail-room-img">
+        </div>
+
+        <div class="detail-info-side">
+          <div class="detail-header">
+            <h2 class="detail-title">Nama Ruangan</h2>
+            <span class="status-badge available" id="statusBadge">Tersedia</span>
+          </div>
+
+          <div class="info-list">
+            <div class="info-item">
+              <img src="../assets/images/tdesign_location-filled.png" class="info-icon">
+              <span class="detail-location-text">Lokasi Kampus</span>
+            </div>
+            <div class="info-item">
+              <img src="../assets/images/tabler_map-code.png" class="info-icon">
+              <span>Kode Kelas - <strong>K132</strong></span>
+            </div>
+            <div class="info-item">
+              <img src="../assets/images/f7_person-2-fill.png" class="info-icon">
+              <span>38 Orang</span>
+            </div>
+          </div>
+
+          <div class="facilities-section">
+            <span class="facilities-label">Fasilitas :</span>
+            <div class="facilities-grid">
+              <div class="facility-item">
+                <img src="../assets/images/mingcute_black-board-line.png" class="facility-icon">
+                <span class="facility-name">Whiteboard</span>
+                <span class="facility-desc">Papan tulis + Spidol</span>
+              </div>
+              <div class="facility-item">
+                <img src="../assets/images/fa7-solid_computer.png" class="facility-icon">
+                <span class="facility-name">Komputer</span>
+                <span class="facility-desc">Alat pembelajaran</span>
+              </div>
+              <div class="facility-item">
+                <img src="../assets/images/mingcute_projector-fill.png" class="facility-icon">
+                <span class="facility-name">Proyektor</span>
+                <span class="facility-desc">Untuk presentasi</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="booking-form-row">
+            <div class="form-group">
+              <label>Waktu Mulai</label>
+              <select class="form-select-detail" id="startTimeSelect"></select>
+            </div>
+            <div class="form-group">
+              <label>Waktu Selesai</label>
+              <select class="form-select-detail" id="endTimeSelect"></select>
+            </div>
+          </div>
+
+          <button type="button" class="btn-reservasi" id="btnReservasiAction">Reservasi Sekarang</button>
+
+          <div class="warning-box">
+            <strong>Perhatian!</strong>
+            Harap cek kembali detail pemesanan Anda sebelum melakukan reservasi.
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </section>
+
+  <!-- MODAL RECEIPT -->
+  <div id="modal-receipt" class="modal-overlay" onclick="closeReceiptOnOverlay(event)">
+    <div class="receipt-card" role="dialog" aria-modal="true" aria-labelledby="receiptTitle">
+
+      <div class="receipt-top">
+        <div class="receipt-success-icon">
+          <i class="fas fa-check"></i>
+        </div>
+        <h2 class="receipt-title" id="receiptTitle">Pemesanan Berhasil!</h2>
+        <p class="receipt-subtitle">Reservasi ruang kelas Anda telah dikonfirmasi</p>
+      </div>
+
+      <div class="receipt-divider"></div>
+
+      <div class="receipt-section">
+        <h4>Detail Pemesanan</h4>
+
+        <div class="receipt-grid">
+          <div class="receipt-item">
+            <div class="label"><i class="fas fa-hashtag"></i> Kode Booking</div>
+            <div class="value" id="receiptCode">#BOOK-XXXXXX</div>
+          </div>
+          <div class="receipt-item">
+            <div class="label"><i class="fas fa-calendar-alt"></i> Tanggal</div>
+            <div class="value" id="receiptDate">-</div>
+          </div>
+
+          <div class="receipt-item">
+            <div class="label"><i class="far fa-clock"></i> Waktu</div>
+            <div class="value"><span id="receiptStart">-</span> s/d <span id="receiptEnd">-</span></div>
+          </div>
+          <div class="receipt-item">
+            <div class="label"><i class="fas fa-door-open"></i> Ruangan</div>
+            <div class="value" id="receiptRoom">-</div>
+          </div>
+
+          <div class="receipt-item">
+            <div class="label"><i class="fas fa-map-marker-alt"></i> Lokasi</div>
+            <div class="value" id="receiptLocation">-</div>
+          </div>
+          <div class="receipt-item">
+            <div class="label"><i class="fas fa-users"></i> Kapasitas</div>
+            <div class="value" id="receiptCapacity">-</div>
+          </div>
+
+          <div class="receipt-item">
+            <div class="label"><i class="fas fa-user-tie"></i> Dosen</div>
+            <div class="value" id="receiptName">-</div>
+          </div>
+          <div class="receipt-item">
+            <div class="label"><i class="fas fa-info-circle"></i> Status</div>
+            <div class="value">
+              <span class="badge-status" id="receiptStatus"><i class="fas fa-check-circle"></i> Dikonfirmasi</span>
+            </div>
+          </div>
+        </div>
+
+        <h4 style="margin-top:16px;">Instruksi Penggunaan</h4>
+        <div class="instructions">
+          <div class="instruction-row">
+            <div class="step-badge">1</div>
+            <p>Tunjukkan kode booking ini kepada petugas di lokasi ruangan</p>
+          </div>
+          <div class="instruction-row">
+            <div class="step-badge">2</div>
+            <p>Pastikan untuk hadir 15 menit sebelum jadwal dimulai</p>
+          </div>
+          <div class="instruction-row">
+            <div class="step-badge">3</div>
+            <p>Jaga kebersihan dan fasilitas ruangan selama penggunaan</p>
+          </div>
+          <div class="instruction-row">
+            <div class="step-badge">4</div>
+            <p>Matikan semua peralatan sebelum meninggalkan ruangan</p>
+          </div>
+        </div>
+
+        <div class="note-box">
+          <div class="note-title"><i class="fas fa-exclamation-triangle"></i> Catatan Penting</div>
+          <p>Jika Anda perlu membatalkan atau reschedule pemesanan, harap hubungi helpdesk minimal 24 jam sebelum jadwal berlangsung.</p>
+        </div>
+
+        <!-- WHATSAPP SECTION -->
+        <div class="wa-section" id="waSection">
+          <div class="wa-title"><i class="fab fa-whatsapp"></i> Bagikan ke Grup Kelas</div>
+          <textarea id="waDraftText" class="wa-draft-area" rows="4"></textarea>
+          <a id="btnSendWa" href="#" target="_blank" class="btn-send-wa">
+            <i class="fab fa-whatsapp"></i> Kirim ke WhatsApp
+          </a>
+        </div>
+
+        <div class="receipt-actions">
+          <button class="receipt-btn btn-blue" type="button" onclick="downloadReceiptPDF()">
+            <i class="fas fa-download"></i> Unduh PDF
+          </button>
+          <button class="receipt-btn btn-gray" type="button" onclick="printReceipt()">
+            <i class="fas fa-print"></i> Cetak
+          </button>
+          <button class="receipt-btn btn-green" type="button" onclick="shareReceipt()">
+            <i class="fas fa-share-alt"></i> Bagikan
+          </button>
+        </div>
+
+        <button class="receipt-back" type="button" onclick="closeReceipt()">
+          Kembali ke Daftar Kelas
+        </button>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- html2pdf -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+
+  <script>
+    // === 1. DATA USER & INITIALIZATION ===
+    const USERS_DB = [
+      { nim: "11154782", pass: "sanditaufik82", name: "Taufik Hidayat", prefLocation: "Karawaci" },
+      { nim: "11123569", pass: "passhengky23", name: "Hengky Mulyono", prefLocation: "Depok" }
+    ];
+
+    document.addEventListener('DOMContentLoaded', () => {
+      checkLoginNavbar();
+      generateTimeOptions();
+
+      const urlParams = new URLSearchParams(window.location.search);
+      const searchQuery = urlParams.get('q');
+      if (searchQuery) {
+        document.getElementById('globalSearchInput').value = searchQuery;
+        filterCards(searchQuery);
+      }
+    });
+
+    // === 2. LOGIC NAVBAR (SESSION) ===
+    function checkLoginNavbar() {
+      const isLoggedIn = localStorage.getItem("isLoggedIn");
+      const userName = localStorage.getItem("userName");
+      const authBtn = document.getElementById('authBtn');
+
+      if (isLoggedIn === "true" && authBtn) {
+        const firstName = (userName || "").split(" ")[0];
+        authBtn.innerHTML = `Hi, ${firstName} <i class="fas fa-sign-out-alt"></i>`;
+        authBtn.style.backgroundColor = "#E74C3C";
+        authBtn.href = "#";
+        authBtn.onclick = function(e) {
+          e.preventDefault();
+          if(confirm("Yakin ingin logout?")) {
+            localStorage.removeItem("isLoggedIn");
+            localStorage.removeItem("userName");
+            window.location.reload();
+          }
+        };
+      }
+    }
+
+    // === 3. BUKA DETAIL KELAS (DENGAN LOGIKA VALIDASI) ===
+    function openBookingDetail(cardElement) {
+      const detailView = document.getElementById('detailView');
+      const cardsContainer = document.getElementById('cardsContainer');
+      const recContainer = document.getElementById('recContainer');
+      const filterBar = document.getElementById('filterBar');
+
+      const roomName = cardElement.querySelector('.card-title').innerText;
+      const roomDesc = cardElement.querySelector('.card-desc').innerText;
+      const roomImgSrc = cardElement.querySelector('.card-image').src;
+
+      document.querySelector('.detail-title').innerText = roomName;
+      document.querySelector('.detail-location-text').innerText = roomDesc;
+      document.querySelector('.detail-room-img').src = roomImgSrc;
+
+      const isLoggedIn = localStorage.getItem("isLoggedIn") === "true";
+      const btnReservasi = document.getElementById('btnReservasiAction');
+      const statusBadge = document.getElementById('statusBadge');
+
+      if (isLoggedIn) {
+        btnReservasi.innerText = "Reservasi Sekarang";
+        btnReservasi.classList.remove('btn-disabled');
+        btnReservasi.onclick = () => processBooking(roomName, roomDesc);
+
+        statusBadge.innerText = "Tersedia";
+        statusBadge.classList.remove('badge-disabled');
+      } else {
+        btnReservasi.innerText = "Login untuk Memesan";
+        btnReservasi.classList.add('btn-disabled');
+        btnReservasi.onclick = null;
+
+        statusBadge.innerText = "Login Diperlukan";
+        statusBadge.classList.add('badge-disabled');
+      }
+
+      cardsContainer.style.display = 'none';
+      recContainer.style.display = 'none';
+      filterBar.style.display = 'none';
+      detailView.style.display = 'block';
+      window.scrollTo(0, 0);
+    }
+
+    function closeBookingDetail() {
+      document.getElementById('detailView').style.display = 'none';
+      document.getElementById('cardsContainer').style.display = 'flex';
+      document.getElementById('recContainer').style.display = 'flex';
+      document.getElementById('filterBar').style.display = 'flex';
+    }
+
+    // === 4. FITUR REKOMENDASI ===
+    function showRecommendations() {
+      const isLoggedIn = localStorage.getItem("isLoggedIn") === "true";
+      if (!isLoggedIn) { alert("Silakan Login terlebih dahulu untuk melihat rekomendasi!"); return; }
+
+      const userName = localStorage.getItem("userName");
+      const currentUser = USERS_DB.find(u => u.name === userName);
+      if (!currentUser) return;
+
+      const prefLocation = currentUser.prefLocation.toLowerCase();
+      const cards = document.querySelectorAll('.class-card');
+      let foundCount = 0;
+
+      cards.forEach(card => {
+        const cardText = card.innerText.toLowerCase();
+        if (cardText.includes(prefLocation)) {
+          card.style.display = 'block';
+          card.style.border = "3px solid #27AE60";
+          foundCount++;
+        } else {
+          card.style.display = 'none';
+          card.style.border = "1px solid rgba(255,255,255,0.5)";
+        }
+      });
+
+      if(foundCount > 0) alert(`Menampilkan ${foundCount} rekomendasi di ${currentUser.prefLocation} untuk Anda!`);
+      else {
+        alert("Tidak ada kelas rekomendasi saat ini.");
+        cards.forEach(c => c.style.display = 'block');
+      }
+    }
+
+    // === 5. GENERATE JAM & BOOKING ===
+    function generateTimeOptions() {
+      const startSelect = document.getElementById('startTimeSelect');
+      const endSelect = document.getElementById('endTimeSelect');
+      const timeSlots = [
+        "07.30 - 08.30", "08.30 - 09.30", "09.30 - 10.30", "10.30 - 11.30",
+        "11.30 - 12.30", "12.30 - 13.30", "13.30 - 14.30", "14.30 - 15.30",
+        "15.30 - 16.30", "16.30 - 17.30", "17.30 - 18.30", "18.30 - 19.30"
+      ];
+      let html = '<option value="">Pilih Jam</option>';
+      timeSlots.forEach((t, i) => html += `<option value="${t}">Jam Ke-${i+1} (${t})</option>`);
+      if(startSelect) startSelect.innerHTML = html;
+      if(endSelect) endSelect.innerHTML = html;
+    }
+
+    function processBooking(room, loc) {
+      const start = document.getElementById('startTimeSelect').value;
+      const end = document.getElementById('endTimeSelect').value;
+      if(!start || !end) { alert("Pilih waktu dulu!"); return; }
+
+      document.getElementById('receiptName').innerText = localStorage.getItem("userName") || "-";
+      document.getElementById('receiptRoom').innerText = room || "-";
+
+      // loc format: "Universitas Gunadarma Kampus K\nRegion - Karawaci\nKode kelas - K132"
+      const locClean = (loc || "").replace(/\n/g, " ").trim();
+      const kampusMatch = locClean.match(/Kampus\s+([A-Z])/i);
+      const regionMatch = locClean.match(/Region\s*-\s*([A-Za-z]+)/i);
+
+      const kampusText = kampusMatch ? `Kampus ${kampusMatch[1].toUpperCase()}` : "Kampus -";
+      const regionText = regionMatch ? regionMatch[1] : "-";
+
+      document.getElementById('receiptLocation').innerText = `${kampusText} - ${regionText}`;
+      document.getElementById('receiptStart').innerText = start;
+      document.getElementById('receiptEnd').innerText = end;
+
+      // Tanggal (hari ini)
+      const dateOpts = { day: 'numeric', month: 'long', year: 'numeric' };
+      document.getElementById('receiptDate').innerText = new Date().toLocaleDateString('id-ID', dateOpts);
+
+      // Kode Booking random
+      const rand = Math.random().toString(36).substring(2, 8).toUpperCase();
+      document.getElementById('receiptCode').innerText = `#BOOK-${rand}`;
+
+      // Kapasitas ambil dari UI detail
+      const capEl = document.querySelector('.detail-info-side .info-list .info-item:nth-child(3) span');
+      document.getElementById('receiptCapacity').innerText = capEl ? capEl.innerText : "-";
+
+      // Status
+      const statusEl = document.getElementById('receiptStatus');
+      if(statusEl) statusEl.innerHTML = `<i class="fas fa-check-circle"></i> Dikonfirmasi`;
+
+      // Draft WhatsApp + link
+      setWhatsAppDraft();
+
+      // Show modal
+      document.getElementById('modal-receipt').style.display = 'flex';
+    }
+
+    function closeReceipt() {
+      document.getElementById('modal-receipt').style.display = 'none';
+      closeBookingDetail();
+    }
+
+    function closeReceiptOnOverlay(e){
+      const overlay = document.getElementById('modal-receipt');
+      if (e.target === overlay) closeReceipt();
+    }
+
+    // === WHATSAPP ===
+    function buildWhatsAppMessage() {
+      const userName = document.getElementById('receiptName')?.innerText || "-";
+      const code     = document.getElementById('receiptCode')?.innerText || "-";
+      const room     = document.getElementById('receiptRoom')?.innerText || "-";
+      const lokasi   = document.getElementById('receiptLocation')?.innerText || "-";
+      const tanggal  = document.getElementById('receiptDate')?.innerText || "-";
+      const start    = document.getElementById('receiptStart')?.innerText || "-";
+      const end      = document.getElementById('receiptEnd')?.innerText || "-";
+
+      return (
+`Halo rekan-rekan mahasiswa,
+
+Diberitahukan perkuliahan Dosen *${userName}* telah melakukan reservasi ruang.
+
+📌 Kode Booking: ${code}
+📍 Ruang: *${room}* (${lokasi})
+📅 Tanggal: ${tanggal}
+🕘 Waktu: ${start} s/d ${end}
+
+Harap hadir tepat waktu. Terima kasih.
+(Pesan otomatis via UG ROOM)`
+      );
+    }
+
+    function setWhatsAppDraft() {
+      const textarea = document.getElementById('waDraftText');
+      const btnWa    = document.getElementById('btnSendWa');
+      if (!textarea || !btnWa) return;
+
+      textarea.value = buildWhatsAppMessage();
+      btnWa.href = `https://wa.me/?text=${encodeURIComponent(textarea.value)}`;
+
+      textarea.oninput = () => {
+        btnWa.href = `https://wa.me/?text=${encodeURIComponent(textarea.value)}`;
+      };
+    }
+
+    // === SHARE / PRINT / PDF ===
+    function printReceipt(){
+      window.print();
+    }
+
+    function shareReceipt(){
+      const text = [
+        "Bukti Reservasi UG Room",
+        document.getElementById('receiptCode')?.innerText || "",
+        document.getElementById('receiptRoom')?.innerText || "",
+        document.getElementById('receiptLocation')?.innerText || "",
+        "Tanggal: " + (document.getElementById('receiptDate')?.innerText || ""),
+        "Waktu: " + (document.getElementById('receiptStart')?.innerText || "") + " s/d " + (document.getElementById('receiptEnd')?.innerText || "")
+      ].join("\n");
+
+      if (navigator.share) {
+        navigator.share({ title: "Bukti Reservasi", text }).catch(() => {});
+      } else {
+        navigator.clipboard?.writeText(text);
+        alert("Detail reservasi disalin ke clipboard (perangkat tidak mendukung Share).");
+      }
+    }
+
+    async function downloadReceiptPDF(){
+      const card = document.querySelector('#modal-receipt .receipt-card');
+      if (!card) return;
+
+      const actions = card.querySelector('.receipt-actions');
+      const backBtn  = card.querySelector('.receipt-back');
+      const waSection = card.querySelector('#waSection');
+
+      const prevActionsDisplay = actions ? actions.style.display : '';
+      const prevBackDisplay    = backBtn ? backBtn.style.display : '';
+      const prevWaDisplay      = waSection ? waSection.style.display : '';
+
+      if (actions) actions.style.display = 'none';
+      if (backBtn) backBtn.style.display = 'none';
+      if (waSection) waSection.style.display = 'none';
+
+      // Kunci: matikan batas tinggi & scroll saat render PDF
+      const prevMaxHeight = card.style.maxHeight;
+      const prevOverflowY = card.style.overflowY;
+      const prevBoxShadow = card.style.boxShadow;
+
+      card.style.maxHeight = 'none';
+      card.style.overflowY = 'visible';
+      card.style.boxShadow = 'none';
+
+      await new Promise(r => setTimeout(r, 80));
+
+      const code = (document.getElementById('receiptCode')?.innerText || 'Bukti-Reservasi')
+        .replace('#','')
+        .replace(/\s+/g,'-');
+
+      const opt = {
+        margin: [10, 10, 10, 10],
+        filename: `${code}.pdf`,
+        image: { type: 'jpeg', quality: 1.0 },
+        html2canvas: {
+          scale: 3,
+          useCORS: true,
+          backgroundColor: '#ffffff',
+          scrollY: 0
+        },
+        jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' },
+        pagebreak: { mode: ['css', 'legacy'] }
+      };
+
+      try {
+        await html2pdf().set(opt).from(card).save();
+      } catch (err) {
+        console.error(err);
+        alert("Gagal membuat PDF. Coba lagi ya.");
+      } finally {
+        card.style.maxHeight = prevMaxHeight;
+        card.style.overflowY = prevOverflowY;
+        card.style.boxShadow = prevBoxShadow;
+
+        if (actions) actions.style.display = prevActionsDisplay;
+        if (backBtn) backBtn.style.display = prevBackDisplay;
+        if (waSection) waSection.style.display = prevWaDisplay;
+      }
+    }
+
+    // === FILTER & SEARCH ===
+    function handleGlobalSearch() {
+      const input = document.getElementById('globalSearchInput');
+      const keyword = input.value.trim();
+      if (keyword) {
+        const newUrl = window.location.pathname + '?q=' + encodeURIComponent(keyword);
+        window.history.pushState({path: newUrl}, '', newUrl);
+        filterCards(keyword);
+      } else {
+        showAllCards();
+      }
+    }
+
+    function applyCustomFilter() {
+      const region = document.getElementById('inputRegion').value;
+      const tipe = document.getElementById('inputTipe').value;
+      filterCardsCustom(region, tipe);
+    }
+
+    function filterCards(query) {
+      const cards = document.querySelectorAll('.class-card');
+      let foundCount = 0;
+      const lowerQuery = query.toLowerCase();
+      cards.forEach(card => {
+        const text = card.innerText.toLowerCase();
+        if (text.includes(lowerQuery)) { card.style.display = 'block'; foundCount++; }
+        else { card.style.display = 'none'; }
+      });
+      toggleEmptyState(foundCount);
+    }
+
+    function filterCardsCustom(region, tipe) {
+      const cards = document.querySelectorAll('.class-card');
+      let foundCount = 0;
+      cards.forEach(card => {
+        const text = card.innerText.toLowerCase();
+        let match = true;
+        if (region && !text.includes(region.toLowerCase())) match = false;
+        if (tipe && !text.includes(tipe.toLowerCase())) match = false;
+
+        if (match) { card.style.display = 'block'; foundCount++; }
+        else { card.style.display = 'none'; }
+      });
+      toggleEmptyState(foundCount);
+    }
+
+    function showAllCards() {
+      const cards = document.querySelectorAll('.class-card');
+      cards.forEach(card => card.style.display = 'block');
+      toggleEmptyState(cards.length);
+    }
+
+    function toggleEmptyState(count) {
+      const emptyState = document.getElementById('emptyState');
+      emptyState.style.display = count === 0 ? 'block' : 'none';
+    }
+
+    // Dropdown helpers (simple)
+    function toggleDropdown(listId) {
+      closeAllDropdowns();
+      const el = document.getElementById(listId);
+      if (el) el.classList.toggle("show");
+    }
+    function selectOption(inputId, listId, value) {
+      document.getElementById(inputId).value = value;
+      document.getElementById(listId).classList.remove("show");
+    }
+    function closeAllDropdowns() {
+      var dropdowns = document.getElementsByClassName("dropdown-list");
+      for (var i = 0; i < dropdowns.length; i++) dropdowns[i].classList.remove('show');
+    }
+    window.onclick = function(event) {
+      if (!event.target.matches('.dropdown-input')) closeAllDropdowns();
+    }
+  </script>
+
+</body>
+</html>
