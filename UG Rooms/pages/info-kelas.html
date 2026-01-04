@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Info Kelas - UG Room</title>
+    <link rel="icon" href="../assets/images/Logo-Gunadarma-Universitas-Gunadarma-Original-PNG-1140x1175 1.png" type="image/png">
+    <link rel="stylesheet" href="../style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Almarai:wght@300;400;700;800&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
+</head>
+<body>
+
+    <nav class="navbar">
+        <div class="container nav-container">
+            <a href="../index.html" class="nav-brand">
+                <img src="../assets/images/Logo gundar untuk navigation bar.png" alt="Logo Gunadarma">
+            </a>
+
+            <ul class="nav-menu">
+                <li><a href="../index.html">Beranda</a></li>
+                <li><a href="pesan-kelas.html">Pesan Kelas</a></li>
+                <li><a href="info-kelas.html" class="active" style="color: var(--primary-color);">Info Kelas</a></li>
+                <li><a href="jadwal-kuliah.html">Jadwal Kuliah</a></li>
+                <li><a href="bantuan.html">Bantuan</a></li>
+            </ul>
+
+            <div style="display: flex; align-items: center;">
+                <div class="nav-search">
+                    <i class="fas fa-search"></i>
+                    <input type="text" placeholder="Cari Kelas...">
+                </div>
+                <a href="login.html" class="btn-login" id="authBtn">
+                    Login <i class="fas fa-sign-in-alt"></i> 
+                </a>
+            </div>
+        </div>
+    </nav>
+
+    <section class="info-section">
+        
+        <div id="catalogView" style="width: 100%; display: flex; flex-direction: column; align-items: center;">
+            
+            <div class="catalog-header-card">
+                <div class="catalog-title-row">
+                    <h2 class="catalog-title">Katalog Ruang Kelas</h2>
+                    <span class="catalog-count">Menampilkan 0 Ruangan</span>
+                </div>
+            </div>
+
+            <div class="info-grid-container" id="catalogGrid">
+                <!-- Akan diisi oleh JavaScript -->
+            </div>
+
+        </div>
+
+    </section>
+
+    <script src="../script.js"></script>
+
+</body>
+</html>

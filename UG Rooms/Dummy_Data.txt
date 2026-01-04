@@ -1,0 +1,119 @@
+// Data Dummy Ruang Kelas
+const dummyRooms = [
+    {
+        id: 1,
+        code: "LAB-301",
+        name: "Laboratorium Komputer 301",
+        capacity: 40,
+        projector: true,
+        location: "Gedung D, Lantai 3",
+        facilities: ["AC", "Proyektor", "PC 40 Unit", "Whiteboard", "Internet"],
+        status: "available",
+        building: "Gedung D"
+    },
+    {
+        id: 2,
+        code: "R-402",
+        name: "Ruang Kelas 402",
+        capacity: 60,
+        projector: true,
+        location: "Gedung A, Lantai 4",
+        facilities: ["AC", "Proyektor", "Sound System", "Whiteboard"],
+        status: "available",
+        building: "Gedung A"
+    },
+    {
+        id: 3,
+        code: "R-205",
+        name: "Ruang Kelas 205",
+        capacity: 50,
+        projector: true,
+        location: "Gedung B, Lantai 2",
+        facilities: ["AC", "Proyektor", "Whiteboard"],
+        status: "unavailable",
+        building: "Gedung B"
+    },
+    {
+        id: 4,
+        code: "LAB-101",
+        name: "Laboratorium Desain 101",
+        capacity: 30,
+        projector: true,
+        location: "Gedung C, Lantai 1",
+        facilities: ["AC", "Proyektor", "iMac 30 Unit", "Tablet Grafik", "Internet"],
+        status: "available",
+        building: "Gedung C"
+    },
+    {
+        id: 5,
+        code: "LAB-501",
+        name: "Laboratorium AI 501",
+        capacity: 25,
+        projector: true,
+        location: "Gedung E, Lantai 5",
+        facilities: ["AC", "Proyektor 4K", "Server GPU", "PC High-End", "Internet Fiber"],
+        status: "available",
+        building: "Gedung E"
+    },
+    {
+        id: 6,
+        code: "R-401",
+        name: "Ruang Kelas 401",
+        capacity: 45,
+        projector: false,
+        location: "Gedung B, Lantai 4",
+        facilities: ["AC", "Whiteboard"],
+        status: "available",
+        building: "Gedung B"
+    },
+    {
+        id: 7,
+        code: "AUD-001",
+        name: "Auditorium Utama",
+        capacity: 200,
+        projector: true,
+        location: "Gedung Pusat, Lantai 1",
+        facilities: ["AC", "Proyektor 4K", "Sound System Profesional", "Panggung", "Mic Wireless"],
+        status: "unavailable",
+        building: "Gedung Pusat"
+    },
+    {
+        id: 8,
+        code: "R-105",
+        name: "Ruang Seminar 105",
+        capacity: 80,
+        projector: true,
+        location: "Gedung F, Lantai 1",
+        facilities: ["AC", "Proyektor", "Sound System", "Whiteboard", "Meja Bundar"],
+        status: "available",
+        building: "Gedung F"
+    }
+];
+
+// Data Dummy Jadwal
+const dummySchedule = [
+    { id: 1, room: "LAB-301", day: "Senin", date: "2024-01-15", startTime: "08:00", endTime: "10:00", lecturer: "Dr. Ahmad Santoso, M.Kom", course: "Pemrograman Web", status: "confirmed" },
+    { id: 2, room: "R-402", day: "Senin", date: "2024-01-15", startTime: "10:00", endTime: "12:00", lecturer: "Prof. Siti Nurhaliza, Ph.D", course: "Data Science", status: "confirmed" },
+    { id: 3, room: "R-205", day: "Senin", date: "2024-01-15", startTime: "13:00", endTime: "15:00", lecturer: "Dr. Budi Raharjo, M.T.I", course: "Manajemen Proyek IT", status: "confirmed" },
+    { id: 4, room: "LAB-101", day: "Senin", date: "2024-01-15", startTime: "15:00", endTime: "17:00", lecturer: "Maya Indah, S.Ds., M.Ds.", course: "UI/UX Design", status: "pending" },
+    { id: 5, room: "LAB-501", day: "Selasa", date: "2024-01-16", startTime: "08:00", endTime: "10:00", lecturer: "Dr. Rizki Priambodo, M.Sc", course: "Machine Learning", status: "confirmed" },
+    { id: 6, room: "R-401", day: "Selasa", date: "2024-01-16", startTime: "10:00", endTime: "12:00", lecturer: "Ir. Bambang Susanto, M.Kom", course: "Cyber Security", status: "confirmed" },
+    { id: 7, room: "AUD-001", day: "Selasa", date: "2024-01-16", startTime: "13:00", endTime: "15:00", lecturer: "Dr. Michael Tanuwijaya", course: "Seminar Teknologi", status: "confirmed" },
+    { id: 8, room: "R-105", day: "Selasa", date: "2024-01-16", startTime: "15:00", endTime: "17:00", lecturer: "Dr. Sarah Wijaya, M.Si", course: "Statistika", status: "pending" }
+];
+
+// Data Dummy Pengguna (Dosen)
+const dummyUsers = [
+    { id: 1, name: "Dr. Ahmad Santoso, M.Kom", email: "ahmad.santoso@staff.gunadarma.ac.id", role: "dosen", faculty: "Teknologi Informasi" },
+    { id: 2, name: "Prof. Siti Nurhaliza, Ph.D", email: "siti.nurhaliza@staff.gunadarma.ac.id", role: "dosen", faculty: "Ilmu Komputer" },
+    { id: 3, name: "Dr. Budi Raharjo, M.T.I", email: "budi.raharjo@staff.gunadarma.ac.id", role: "dosen", faculty: "Sistem Informasi" },
+    { id: 4, name: "Maya Indah, S.Ds., M.Ds.", email: "maya.indah@staff.gunadarma.ac.id", role: "dosen", faculty: "Desain Komunikasi Visual" }
+];
+
+// Data Dummy Pemesanan
+const dummyBookings = [
+    { id: 1, roomId: 1, userId: 1, date: "2024-01-22", startTime: "08:00", endTime: "10:00", purpose: "Kuliah Pemrograman Web", status: "approved" },
+    { id: 2, roomId: 2, userId: 2, date: "2024-01-22", startTime: "10:00", endTime: "12:00", purpose: "Kuliah Data Science", status: "pending" },
+    { id: 3, roomId: 3, userId: 3, date: "2024-01-23", startTime: "13:00", endTime: "15:00", purpose: "Kuliah Manajemen Proyek", status: "approved" },
+    { id: 4, roomId: 4, userId: 4, date: "2024-01-23", startTime: "15:00", endTime: "17:00", purpose: "Kuliah UI/UX Design", status: "rejected" }
+];
